@@ -7,4 +7,5 @@
 *.sln.docstates
 bin/
 obj/
-ClientApp/node_modules/  # If you're using npm/yarn for the Angular part
+SpaceXLaunches/ClientApp/node_modules/
+SpaceXLaunches/ClientApp/.angular/

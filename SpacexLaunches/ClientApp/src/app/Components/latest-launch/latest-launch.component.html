@@ -1,0 +1,43 @@
+<div class="card launch-details">
+  <div class="card-body row-cols-1">
+    <div *ngIf="launch?.links?.patch" class="launch-patch-container mb-4 text-center">
+      <img [src]="launch?.links?.patch?.small" alt="Launch Patch" class="launch-patch img-fluid">
+    </div>
+
+    <h1 class="card-title launch-name text-center mb-4">{{ launch?.name }}</h1>
+
+    <div class="launch-info mb-4">
+      <p><strong>Launch Date:</strong> <span class="launch-date">{{ launch?.date_utc | date: 'fullDate' }}</span></p>
+      <p>
+        <strong>Launch Success:</strong>
+        <span [ngClass]="{'text-success': launch?.success, 'text-danger': !launch?.success}" class="launch-success">
+          {{ launch?.success ? 'Success' : 'Failure' }}
+        </span>
+      </p>
+    </div>
+
+    <div class="crew mb-4">
+      <h3 class="crew-heading mb-3">Crew Members</h3>
+      <ul class="crew-list">
+        <li *ngFor="let member of launch?.crew">
+          <strong>{{ member?.role }}:</strong> {{ member?.crew }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="media-links mb-4">
+      <a *ngIf="launch?.links?.webcast" class="btn btn-primary w-100 mt-3" href="{{ launch?.links?.webcast }}" target="_blank">
+        Watch Webcast
+      </a>
+    </div>
+
+    <div class="landing-success mb-4">
+      <strong>Landing Success:</strong>
+      <div *ngFor="let core of launch?.cores" class="mb-2">
+        <span [ngClass]="{'text-success': core?.landing_success, 'text-danger': !core?.landing_success}">
+          {{ core?.landing_success ? 'Yes' : 'No' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

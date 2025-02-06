@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div *ngFor="let launch of launches" class="col">
+      <div class="card h-100 shadow-sm">
+        <img *ngIf="launch.links.patch.small" [src]="launch.links.patch.small" loading="lazy" class="card-img-top p-3" alt="Launch Patch">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ launch.name }}</h5>
+          <p class="card-text"><strong>Launch Date:</strong> {{ launch.date_utc | date: 'fullDate' }}</p>
+
+          <p class="card-text">
+            {{ launch && launch.details && !isTruncated[launch.id] ? (launch.details.length > 100 ? (launch.details | slice: 0:100) + '...' : launch.details) : launch?.details }}
+          </p>
+
+          <button class="btn btn-link p-0 text-decoration-none"
+                  (click)="toggleTruncate(launch.id)"
+                  *ngIf="(launch.details?.length ?? 0) > 100">
+            {{ !isTruncated[launch.id] ? 'Read More' : 'Show Less' }}
+          </button>
+
+          <div class="mt-auto">
+            <a href="{{ launch?.links?.webcast }}" class="btn btn-primary w-100 mt-3" *ngIf="launch.links.webcast">
+              Watch on YouTube
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="p-5 text-center">
+  <button *ngIf="showMoreButton" (click)="showMore()" class="btn btn-outline-primary more-btn" type="button">
+    Load More
+  </button>
+</div>

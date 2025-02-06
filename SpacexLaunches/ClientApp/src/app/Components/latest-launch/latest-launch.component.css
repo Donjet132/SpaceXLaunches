@@ -1,0 +1,18 @@
+.launch-patch {
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+.card-body .btn {
+  border-radius: 5px;
+}
+
+.launch-info p {
+  font-size: 1.1em;
+}
+
+.crew-list li {
+  font-size: 1.1em;
+  line-height: 1.6;
+}

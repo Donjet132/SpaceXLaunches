@@ -1,0 +1,6 @@
+@SpacexLaunches_HostAddress = http://localhost:5244
+
+GET {{SpacexLaunches_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

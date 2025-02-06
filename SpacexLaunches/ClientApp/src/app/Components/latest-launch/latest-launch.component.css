@@ -1,18 +1,31 @@
 .launch-patch {
-  border-radius: 8px;
-  max-width: 100%;
+  border-radius: 10px;
+  max-width: 180px;
   height: auto;
-}
-
-.card-body .btn {
-  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .launch-info p {
-  font-size: 1.1em;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+}
+
+.crew {
+  background-color: #f8f9fa;
+  border-left: 5px solid #007bff;
 }
 
 .crew-list li {
   font-size: 1.1em;
   line-height: 1.6;
+}
+
+.btn-primary {
+  border-radius: 8px;
+  font-size: 1.1em;
+  padding: 12px;
+}
+
+.landing-success {
+  font-size: 1.2em;
 }

@@ -36,7 +36,7 @@ namespace SpacexLaunches.Controllers
                         return Ok(launch);
                     }
 
-                    var launchesJson = JsonConvert.DeserializeObject<List<Launch>>(json);
+                    var launchesJson = JsonConvert.DeserializeObject<List<Launch>>(json) ?? new List<Launch>();
                     int totalLaunches = launchesJson.Count;
 
                     var launches = launchesJson
@@ -50,23 +50,9 @@ namespace SpacexLaunches.Controllers
                             Details = x.Details,
                             Success = x.Success,
                             Links = new Links { 
-                               Patch = x.Links.Patch,
-                               Webcast = x.Links.Webcast,
-                            },
-                            Cores = x.Cores.Select(c => new Cores
-                            {
-                                Core = c.Core,
-                                Flight = c.Flight,
-                                Landing_success = c.Landing_success,
-                                Landing_type = c.Landing_type
-                            }).ToList(),
-                            Crew = x.Crew,
-                            Failures = x.Failures.Select(f => new Failure
-                            {
-                                Time = f.Time,
-                                Altitude = f.Altitude,
-                                Reason = f.Reason
-                            }).ToList(),
+                               Patch = x.Links?.Patch,
+                               Webcast = x.Links?.Webcast,
+                            }
                         }).ToList();
 
                     return Ok(new { launches, totalLaunches });

@@ -17,7 +17,7 @@
 
     public class Links
     {
-        public Patch Patch { get; set; }
+        public Patch? Patch { get; set; }
         public string? Webcast { get; set; }
     }
 

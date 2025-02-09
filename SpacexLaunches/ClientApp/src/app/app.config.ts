@@ -22,15 +22,15 @@ import { PastLaunchComponent } from './Components/past-launch/past-launch.compon
     LoginComponent,
     LatestLaunchComponent,
     UpcomingLaunchComponent,
-    PastLaunchComponent
+    PastLaunchComponent,
+    NavbarComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    AppComponent,
-    NavbarComponent,
     CommonModule,
     NgxSpinnerModule,
     BrowserAnimationsModule

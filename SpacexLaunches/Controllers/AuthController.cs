@@ -24,48 +24,62 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
-        if (await _context.Users.AnyAsync(u => u.Email == model.Email))
+        try
         {
-            return BadRequest("User already exists.");
+            if (await _context.Users.AnyAsync(u => u.Email == model.Email))
+            {
+                return BadRequest("User already exists.");
+            }
+
+            var user = new User
+            {
+                Name = model.Name,
+                LastName = model.LastName,
+                Email = model.Email,
+                Password = BCrypt.Net.BCrypt.HashPassword(model.Password)
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "User registered successfully" });
         }
-
-        var user = new User
+        catch (Exception ex)
         {
-            Name = model.Name,
-            LastName = model.LastName,
-            Email = model.Email,
-            Password = BCrypt.Net.BCrypt.HashPassword(model.Password)
-        };
-
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-
-        return Ok(new { Message = "User registered successfully" });
+            return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        }
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-
-        if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+        try
         {
-            return Unauthorized("Invalid email or password.");
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+
+            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+            {
+                return Unauthorized("Invalid email or password.");
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+            return Ok(new { message = "Login successful" });
         }
-
-        var claims = new List<Claim>
+        catch (Exception ex)
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Email, user.Email),
-        };
-
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-        return Ok(new { message = "Login successful" });
+            return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        }
     }
 
     [HttpPost("logout")]
